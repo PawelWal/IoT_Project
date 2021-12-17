@@ -1,0 +1,38 @@
+version: '1'
+
+services:
+
+  broker:
+    container_name: mqtt_broker
+    build: broker
+    
+  database:
+    container_name: database
+    image: mariadb
+    entrypoint:
+      - sleep
+      - 1d
+    
+  webserver:
+    container_name: webserver
+    build: http
+ 
+  api:
+    container_name: api
+    build: rest_api
+    entrypoint:
+      - sleep
+      - 1d
+ 
+  management_node:
+    container_name: management_node
+    build: mn
+    volumes:
+      - ./mn/src:/home/src
+    environment:
+      - PYTHONUNBUFFERED=0
+    working_dir: /home/src  
+    entrypoint:
+      - sleep
+      - 1d
+  
