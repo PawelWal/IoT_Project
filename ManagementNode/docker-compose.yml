@@ -1,4 +1,4 @@
-version: '1'
+version: '2'
 
 services:
 
@@ -18,11 +18,21 @@ services:
     build: http
  
   api:
-    container_name: api
-    build: rest_api
+    container_name: fastapi
+    build: api
+    volumes:
+      - ./api/code:/code/app
+    environment:
+      - PYTHONUNBUFFERED=0
+    ports:
+      - "8080:80" 
     entrypoint:
-      - sleep
-      - 1d
+      - "uvicorn"
+      - "app.api:app"
+      - "--host"
+      - "0.0.0.0"
+      - "--port"
+      - "80"
  
   management_node:
     container_name: management_node
