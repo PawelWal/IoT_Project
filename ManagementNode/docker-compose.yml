@@ -1,29 +1,44 @@
-version: '2'
+version: '3'
 
 services:
 
   broker:
     container_name: mqtt_broker
     build: broker
+    networks:
+      - backend
     
-  database:
+  mariadb:
     container_name: database
-    image: mariadb
-    entrypoint:
-      - sleep
-      - 1d
-    
+    image: mariadb:10.2
+    restart: 'always'
+    volumes: 
+      - ./database/data:/var/lib/mysql
+      - ./database/logs:/var/log/mysql
+      - ./database/conf:/etc/mysql
+      - ./database/scripts:/home/src
+    environment:
+      MYSQL_ROOT_PASSWORD: "p@ss_123"
+      MYSQL_DATABASE: "hotel"
+      MYSQL_USER: "admin"
+      MYSQL_PASSWORD: "p@ss"
+    networks:
+      - backend
+
   webserver:
     container_name: webserver
-    build: http
+    image: httpd:2.4
  
   api:
     container_name: fastapi
     build: api
+    restart: 'always'
     volumes:
       - ./api/code:/code/app
     environment:
       - PYTHONUNBUFFERED=0
+    networks:
+      - backend
     ports:
       - "8080:80" 
     entrypoint:
@@ -33,9 +48,12 @@ services:
       - "0.0.0.0"
       - "--port"
       - "80"
+    depends_on:
+      - database
+    
  
   management_node:
-    container_name: management_node
+    container_name: mgmt
     build: mn
     volumes:
       - ./mn/src:/home/src
@@ -45,4 +63,10 @@ services:
     entrypoint:
       - sleep
       - 1d
+    networks:
+      - backend
+ 
+networks:    
+    backend:
+        driver: bridge
   
