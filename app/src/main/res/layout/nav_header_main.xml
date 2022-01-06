@@ -6,6 +6,7 @@
     android:background="@drawable/side_nav_bar"
     android:gravity="bottom"
     android:orientation="vertical"
+    android:layout_marginTop="20dp"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
@@ -19,11 +20,14 @@
         app:cardCornerRadius="50dp"
         app:strokeWidth="1dp"
         app:strokeColor="@android:color/holo_blue_light">
+
         <ImageView
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
+            android:contentDescription="@string/user_description"
             android:id="@+id/circular_image"
             android:src="@drawable/ic_person" />
+
     </com.google.android.material.card.MaterialCardView>
 
     <TextView
@@ -38,4 +42,5 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/nav_header_subtitle" />
+
 </LinearLayout>
