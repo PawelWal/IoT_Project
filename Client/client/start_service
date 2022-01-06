@@ -1,0 +1,3 @@
+#!/bin/bash
+python listen.py $1 $2
+python publish.py $1 $2

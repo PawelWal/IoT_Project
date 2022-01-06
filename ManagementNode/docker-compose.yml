@@ -5,6 +5,8 @@ services:
   broker:
     container_name: mqtt_broker
     build: broker
+    ports:
+      - "1883:1883"
     networks:
       - backend
     
@@ -24,13 +26,9 @@ services:
       MYSQL_PASSWORD: "p@ss"
     networks:
       - backend
-
-  webserver:
-    container_name: webserver
-    image: httpd:2.4
- 
-  api:
-    container_name: fastapi
+        
+  mgmt:
+    container_name: mgmt
     build: api
     restart: 'always'
     volumes:
@@ -39,8 +37,8 @@ services:
       - PYTHONUNBUFFERED=0
     networks:
       - backend
-    ports:
-      - "8080:80" 
+    expose:
+      - "80" 
     entrypoint:
       - "uvicorn"
       - "app.api:app"
@@ -49,22 +47,20 @@ services:
       - "--port"
       - "80"
     depends_on:
-      - database
-    
- 
-  management_node:
-    container_name: mgmt
-    build: mn
-    volumes:
-      - ./mn/src:/home/src
-    environment:
-      - PYTHONUNBUFFERED=0
-    working_dir: /home/src  
-    entrypoint:
-      - sleep
-      - 1d
+      - mariadb
+      
+  webserver:
+    container_name: webserver
+    image: nginx:latest
+    volumes: 
+      - ./webserver/nginx:/etc/nginx
+      - ./webserver/www:/var/www
+    ports:
+      - "8080:80"
     networks:
-      - backend
+        - backend
+    depends_on:
+      - mgmt
  
 networks:    
     backend:
