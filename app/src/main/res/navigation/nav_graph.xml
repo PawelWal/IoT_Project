@@ -2,4 +2,18 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/mobile_navigation"/>
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@id/userFragment">
+    <fragment
+        android:id="@+id/userFragment"
+        android:name="com.iotproject.hotel.UserFragment"
+        android:label="UserFragment" />
+    <fragment
+        android:id="@+id/checkInFragment"
+        android:name="com.iotproject.hotel.CheckInFragment"
+        android:label="CheckInFragment" />
+    <fragment
+        android:id="@+id/roomCardFragment"
+        android:name="com.iotproject.hotel.RoomCardFragment"
+        android:label="RoomCardFragment" />
+</navigation>

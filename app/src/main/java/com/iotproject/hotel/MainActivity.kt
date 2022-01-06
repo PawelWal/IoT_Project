@@ -21,18 +21,19 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
         val toolbar: Toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
 
-        val drawerLayout: DrawerLayout = findViewById(R.id.drawer_layout)
-        val navView: NavigationView = findViewById(R.id.nav_view)
-        val navController = findNavController(R.id.nav_host_fragment)
-        // Passing each menu ID as a set of Ids because each
-        // menu should be considered as top level destinations.
-        appBarConfiguration = AppBarConfiguration(setOf(
-                R.id.nav_home, R.id.nav_card), drawerLayout)
-        setupActionBarWithNavController(navController, appBarConfiguration)
-        navView.setupWithNavController(navController)
+//        TODO - fix error "activity does not have a nav controller set on 2131231036"
+//        val drawerLayout: DrawerLayout = findViewById(R.id.drawer_layout)
+//        val navView: NavigationView = findViewById(R.id.nav_view)
+//        val navController = findNavController(R.id.nav_host_fragment)
+//
+//        appBarConfiguration = AppBarConfiguration(setOf(R.id.personFragment, R.id.blockFragment), drawerLayout)
+//
+//        setupActionBarWithNavController(navController, appBarConfiguration)
+//        navView.setupWithNavController(navController)
     }
 
     override fun onSupportNavigateUp(): Boolean {

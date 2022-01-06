@@ -4,233 +4,60 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <GridLayout
-        android:id="@+id/signUpGridLayout"
+    <TextView
+        android:id="@+id/addCardText"
+        android:text="@string/check_in_room"
+        android:textColor="@color/blue_main"
+        android:layout_marginTop="10dp"
+        android:textSize="40sp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="100dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent">
+        app:layout_constraintBottom_toTopOf="@id/addCardInfo" />
 
-    <ImageView
-        android:id="@+id/nameImageView"
-        android:src="@drawable/ic_person"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginEnd="20dp"
-        android:layout_column="0"
-        android:layout_row="0"
-        android:layout_gravity="center"/>
+    <TextView
+        android:id="@+id/addCardInfo"
+        android:text="@string/add_room_info"
+        android:textColor="@color/blue_main"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/addCardText"
+        app:layout_constraintBottom_toTopOf="@id/outlinedTextFieldCard" />
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/nameTextField"
-        android:layout_width="300dp"
+        android:id="@+id/outlinedTextFieldCard"
+        android:layout_width="350dp"
         android:layout_height="wrap_content"
-        android:hint="@string/nameLabel"
-        android:layout_marginTop="20dp"
-        android:layout_column="1"
-        android:layout_row="0"
-        android:layout_columnSpan="2">
+        android:hint="@string/token"
+        app:boxStrokeColor="@color/blue_main"
+        android:textColorHint="@color/blue_main"
+        android:gravity="top"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/addCardInfo"
+        app:layout_constraintBottom_toTopOf="@id/checkInButton"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
         <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/tokenTextField"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="text"
-            />
+            android:layout_height="match_parent"
+            android:inputType="number" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/surnameTextField"
-            android:layout_width="300dp"
-            android:layout_height="wrap_content"
-            android:hint="@string/surnameLabel"
-            android:layout_marginTop="20dp"
-            android:layout_column="1"
-            android:layout_row="1"
-            android:layout_columnSpan="2">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="text"
-                />
-
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/documentTextField"
-            android:layout_width="300dp"
-            android:layout_height="wrap_content"
-            android:hint="@string/documentLabel"
-            android:layout_marginTop="20dp"
-            android:layout_column="1"
-            android:layout_row="2"
-            android:layout_columnSpan="2">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="text"
-                />
-
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <ImageView
-            android:id="@+id/phoneImageView"
-            android:src="@drawable/ic_phone"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginEnd="20dp"
-            android:layout_column="0"
-            android:layout_row="4"
-            android:layout_gravity="center"/>
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/phoneTextField"
-            android:layout_width="300dp"
-            android:layout_height="wrap_content"
-            android:hint="@string/phoneLabel"
-            android:layout_marginTop="20dp"
-            android:layout_column="1"
-            android:layout_row="4"
-            android:layout_columnSpan="2">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="phone"
-                />
-
-        </com.google.android.material.textfield.TextInputLayout>
-        <ImageView
-            android:id="@+id/emailImageView"
-            android:src="@drawable/ic_email"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginEnd="20dp"
-            android:layout_column="0"
-            android:layout_row="5"
-            android:layout_gravity="center"/>
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/emailTextField"
-            android:layout_width="300dp"
-            android:layout_height="wrap_content"
-            android:hint="@string/emailLabel"
-            android:layout_marginTop="20dp"
-            android:layout_column="1"
-            android:layout_row="5"
-            android:layout_columnSpan="2">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="textEmailAddress"
-                />
-
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <ImageView
-            android:id="@+id/addressImageView"
-            android:src="@drawable/ic_home"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginEnd="20dp"
-            android:layout_column="0"
-            android:layout_row="6"
-            android:layout_gravity="center"/>
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/addressTextField"
-            android:layout_width="300dp"
-            android:layout_height="wrap_content"
-            android:hint="@string/addressLabel"
-            android:layout_marginTop="20dp"
-            android:layout_column="1"
-            android:layout_row="6"
-            android:layout_columnSpan="2">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="text"
-                />
-
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/cityTextField"
-            android:layout_width="190dp"
-            android:layout_height="wrap_content"
-            android:hint="@string/cityLabel"
-            android:layout_marginTop="20dp"
-            android:layout_column="1"
-            android:layout_row="7">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="phone"
-                />
-
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/codeTextField"
-            android:layout_width="100dp"
-            android:layout_height="wrap_content"
-            android:hint="@string/codeLabel"
-            android:layout_marginTop="20dp"
-            android:layout_column="2"
-            android:layout_row="7"
-            android:layout_marginStart="10dp">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="text" />
-
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/menu"
-            style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu"
-            android:layout_width="300dp"
-            android:layout_height="wrap_content"
-            android:hint="@string/countryLabel"
-            android:layout_column="1"
-            android:layout_columnSpan="2"
-            android:layout_row="8"
-            android:layout_marginTop="10dp">
-
-            <AutoCompleteTextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="text"
-                />
-
-        </com.google.android.material.textfield.TextInputLayout>
-    </GridLayout>
-
     <Button
-        android:id="@+id/signUpButton"
-        android:layout_width="300dp"
+        android:id="@+id/checkInButton"
+        android:text="@string/check_in"
+        android:layout_width="350dp"
         android:layout_height="wrap_content"
-        android:padding="16dp"
-        android:text="@string/checkIn"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.72"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.944" />
-
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/outlinedTextFieldCard"
+        app:layout_constraintBottom_toBottomOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
