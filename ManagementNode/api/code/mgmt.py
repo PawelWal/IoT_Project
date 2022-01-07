@@ -37,7 +37,7 @@ class Mgmt:
 
     def check_rfid(self, rfid_nbr: int):
         cur = self._conn.cursor()
-        cmd = "SELECT name, surname, IF(validUntil <= NOW(), 1, 0) FROM Guests RIGHT JOIN CheckIns ON Guests.id = CheckIns.FK_guest RIGHT JOIN RFIDs ON RFIDs.id = CheckIns.FK_rfid WHERE status=0 AND RFIDs.RFID_no={0}".format(rfid_nbr)
+        cmd = "SELECT name, surname, IF(validUntil <= NOW(), 1, 0) FROM Guests RIGHT JOIN CheckIns ON Guests.id = CheckIns.FK_guest RIGHT JOIN RFIDs ON RFIDs.id = CheckIns.FK_rfid WHERE status=1 AND RFIDs.RFID_no={0}".format(rfid_nbr)
         cur.execute(cmd)
         msg = []
         for name, surname, quarantineEnded in cur:
