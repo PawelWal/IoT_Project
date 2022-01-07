@@ -48,3 +48,13 @@ class Mgmt:
                     msg = [name +" "+ surname, "alarm"]
         cur.close()
         return msg
+
+    def find_guests(self, surname: str):
+        cur = self._conn.cursor()
+        cmd = "SELECT DISTINCT Guests.id, name, surname, RFID_no, phone_no, email FROM Guests JOIN CheckIns ON Guests.id = CheckIns.FK_guest JOIN RFIDs ON RFIDs.id = CheckIns.FK_rfid WHERE surname='{0}'".format(surname)
+        cur.execute(cmd)
+        result = []
+        for guest_id, name, surname, RFID_no, phone_no, email in cur:
+            result.append({"id": guest_id, "name": name, "surname": surname, "RFID": RFID_no, "phone": phone_no, "email": email})
+        cur.close()
+        return result

@@ -2,7 +2,7 @@ from typing import Optional
 
 from fastapi import FastAPI
 
-from pydantic import BaseModel
+from pydantic import BaseModel, SecretStr
 
 from app.mgmt import Mgmt
 import app.mqtt_conn as mqtt
@@ -17,6 +17,11 @@ class Section(BaseModel):
     end_id: int
     is_closed: Optional[bool] = None
     user_name: str
+
+
+class FindGuest(BaseModel):
+    surname: SecretStr
+
 
 @app.get("/")
 def read_root():
@@ -33,3 +38,7 @@ def update_item(sect_id: int, sect: Section):
 @app.get("/countries")
 def get_countries():
     return mn.get_countries()
+
+@app.post("/findGuest")
+def find_guests(findGuest: FindGuest):
+    return mn.find_guests(findGuest.surname.get_secret_value())
