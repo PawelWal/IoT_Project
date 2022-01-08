@@ -26,6 +26,11 @@ services:
       MYSQL_PASSWORD: "p@ss"
     networks:
       - backend
+    healthcheck:
+      test: "/usr/bin/mysql --user=root --password=p@ss_123 --execute \"SHOW DATABASES;\""
+      interval: 2s
+      timeout: 20s
+      retries: 10
         
   mgmt:
     container_name: mgmt
@@ -47,7 +52,9 @@ services:
       - "--port"
       - "80"
     depends_on:
-      - mariadb
+      mariadb:
+        condition: service_healthy
+ 
       
   webserver:
     container_name: webserver
