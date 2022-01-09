@@ -9,7 +9,7 @@ import app.mqtt_conn as mqtt
 
 app = FastAPI(root_path="/api")
 mn = Mgmt()
-mqtt.connect_to_broker("192.168.1.114")
+mqtt.connect_to_broker("192.168.1.108")
 
 class Section(BaseModel):
     name: str
@@ -42,3 +42,7 @@ def get_countries():
 @app.post("/findGuest")
 def find_guests(findGuest: FindGuest):
     return mn.find_guests(findGuest.surname.get_secret_value())
+
+@app.get("/getfindGuest")
+def find_guests(surname: str):
+    return mn.find_guests(surname)
