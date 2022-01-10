@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+<title>Room info</title>
+<link rel="stylesheet" href="main.css" type="text/css">
+</head>
+
+
+<!-- Include Bootstrap for styling -->
+<link rel="stylesheet"
+		href=
+"https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+
+<!-- Include the Bootstrap Table CSS
+for the table -->
+<link rel="stylesheet"
+		href=
+"https://unpkg.com/bootstrap-table@1.16.0/dist/bootstrap-table.min.css">
+
+<body>
+
+<section class="menu">
+    <nav>
+        <ul>
+            <li><a href="roominfo.html">Room info</a></li>
+            <li><a href="searchguests.html">Search guests</a></li>
+            <li><a href="assignrfidtoroom.html">Assign RFID to room</a></li>
+        </ul>
+        <br>
+    </nav>
+</section>
+
+<div id="form"><br>
+    <label> Room number:<br> <input id="searchInput" type="text"></label>
+    <input id="SubmitSurnameBtn" type="submit" value="Search"><br><br><br>
+    
+</div>
+
+
+<div class="container" id="guestData">
+	
+	<table class="table-striped border-success">
+		<thead>
+		<tr>
+			<th data-field="id">
+			<span class="text-success">
+				ID
+			</span>
+			</th>
+			<th data-field="name">
+			<span class="text-success">
+				Name
+			</span>
+			</th>
+            <th data-field="surname">
+			<span class="text-success">
+				Surname
+			</span>
+			</th>
+            <th data-field="RFID">
+			<span class="text-success">
+				RFID
+			</span>
+			</th>
+            <th data-field="phone">
+			<span class="text-success">
+				Phone
+			</span>
+			</th>
+			<th data-field="email">
+			<span class="text-success">
+				Email
+			</span>
+			</th>
+		</tr>
+		</thead>
+	</table>
+</div>
+
+<!-- Include jQuery and other required
+files for Bootstrap -->
+<script src=
+"https://code.jquery.com/jquery-3.3.1.min.js">
+</script>
+<script src=
+"https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js">
+</script>
+<script src=
+"https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js">
+</script>
+
+<!-- Include the JavaScript file
+for Bootstrap table -->
+<script src=
+"https://unpkg.com/bootstrap-table@1.16.0/dist/bootstrap-table.min.js">
+</script>
+<script type="text/javascript">
+	$(document).ready(function () {
+
+	// Use the given data to create
+	// the table and display it
+	$('table').bootstrapTable({
+		data: mydata
+	});
+	});
+
+	// Specify the JSON data to be displayed
+	var mydata =
+	[
+		{
+		"id": "24323",
+		"name": "Mark",
+        "surname": "Smith",
+		"RFID": "sht95u4ryh6t854th",
+        "phone": "846583645",
+        "email": "Smith@onet.pl"
+        
+		},
+		{
+		"id": "24323",
+		"name": "Mark",
+        "surname": "Smith",
+		"RFID": "sht95u4ryh6t854th",
+        "phone": "846583645",
+        "email": "Smith@onet.pl"
+		},
+		{
+		"id": "24323",
+		"name": "Mark",
+        "surname": "Smith",
+		"RFID": "sht95u4ryh6t854th",
+        "phone": "846583645",
+        "email": "Smith@onet.pl"
+		},
+		{
+		"id": "24323",
+		"name": "Mark",
+        "surname": "Smith",
+		"RFID": "sht95u4ryh6t854th",
+        "phone": "846583645",
+        "email": "Smith@onet.pl"
+		},
+		{
+		"id": "24323",
+		"name": "Mark",
+        "surname": "Smith",
+		"RFID": "sht95u4ryh6t854th",
+        "phone": "846583645",
+        "email": "Smith@onet.pl"
+		},{"id":1,"name":"John","surname":"Doe","RFID":"2344832389","phone":123456789,"email":"john.doe@gmail.com"}
+	];
+
+    document.getElementById('guestData').style.display = "none";
+
+    const targetDiv = document.getElementById("guestData");
+    const btn = document.getElementById("SubmitSurnameBtn");
+    btn.onclick = function () {
+    //document.getElementById("saveInput").value
+
+        if (targetDiv.style.display !== "block") {
+            targetDiv.style.display = "block";
+        }
+    };
+
+</script>
+</body>
+
+</html>
+

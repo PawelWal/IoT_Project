@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" 
+        content="width=device-width,
+                 initial-scale=1,
+                 shrink-to-fit=no">
+<title>Search guests</title>
+<link rel="stylesheet" href="main.css" type="text/css">
+
+<!-- Include Bootstrap for styling -->
+<link rel="stylesheet"
+		href=
+"https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+
+<!-- Include the Bootstrap Table CSS
+for the table -->
+<link rel="stylesheet"
+		href=
+"https://unpkg.com/bootstrap-table@1.16.0/dist/bootstrap-table.min.css">
+</head>
+<body>
+
+<section class="menu">
+    <nav>
+        <ul>
+            <li><a href="roominfo.html">Room info</a></li>
+            <li><a href="searchguests.html">Search guests</a></li>
+            <li><a href="assignrfidtoroom.html">Assign RFID to room</a></li>
+        </ul>
+        <br>
+    </nav>
+</section>
+
+<!-- <h1 id="Form">Formularz</h1>
+    <form method="post" action="http://localhost:8080/api/findGuest">
+        <p>
+            <label>Enter guest surname: </label>
+            <input id="idPass" name="Name" type="text" size="30" maxlength="50">
+        </p>
+	
+	<input id="search" type="submit" value="Search"><br><br><br>
+    
+    </form> -->
+
+<div class="container" id="guestData">
+	
+	<table class="table-striped border-success">
+		<thead>
+		<tr>
+			<th data-field="id">
+			<span class="text-success">
+				ID
+			</span>
+			</th>
+			<th data-field="name">
+			<span class="text-success">
+				Name
+			</span>
+			</th>
+            <th data-field="surname">
+			<span class="text-success">
+				Surname
+			</span>
+			</th>
+            <th data-field="RFID">
+			<span class="text-success">
+				RFID
+			</span>
+			</th>
+            <th data-field="phone">
+			<span class="text-success">
+				Phone
+			</span>
+			</th>
+			<th data-field="email">
+			<span class="text-success">
+				Email
+			</span>
+			</th>
+		</tr>
+		</thead>
+	</table>
+</div>
+
+<!-- Include jQuery and other required
+files for Bootstrap -->
+<script src=
+"https://code.jquery.com/jquery-3.3.1.min.js">
+</script>
+<script src=
+"https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js">
+</script>
+<script src=
+"https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js">
+</script>
+
+<!-- Include the JavaScript file
+for Bootstrap table -->
+<script src=
+"https://unpkg.com/bootstrap-table@1.16.0/dist/bootstrap-table.min.js">
+</script>
+<script type="text/javascript">
+	// $(document).ready(function () {
+
+	// // Use the given data to create
+	// // the table and display it
+	// $('table').bootstrapTable({
+	// 	data: mydata
+	// });
+	// });
+
+	// Specify the JSON data to be displayed
+	
+
+	
+	
+
+    // const data = JSON.stringify({
+    //     "surname": "Doe"
+    // });
+    
+	
+    // const userAction = async () => {
+    //     const response =  fetch('http://localhost:8080/api/countries');
+    // //const myJson = await response.json(); //extract JSON from the http response
+    // // do something with myJson
+	// var mydata =  response.json();
+	// console.log(mydata);
+    // }
+
+	let url = 'http://localhost:8080/api/countries';
+
+	fetch(url)
+		.then(res => res.json())
+		.then(out =>
+		console.log('Checkout this JSON! ', out))
+		.catch(err => console.log("err"));
+
+
+	
+	
+    // let data = {"surname": "Doe"};
+
+    // fetch('http://localhost:8080/api/findGuest', {
+    // method: "POST",
+    // headers: {'Content-Type': 'application/json'}, 
+    // body: JSON.stringify(data)
+    // }).then(res => {
+    // console.log("Request complete! response:", res);
+    // });
+
+
+	// fetch('http://localhost:8080/api/countries').then(function(response) {
+	// return response.json();
+	// }).then(function(data) {
+	// console.log(data);
+	// }).catch(function() {
+	// console.log("Booo");
+	// });
+	
+        
+    //var mydata = await response.json();
+
+    // document.getElementById('guestData').style.display = "none";
+
+    // const targetDiv = document.getElementById("guestData");
+    // const btn = document.getElementById("search");
+    // btn.onclick = function () {
+	// 	if (targetDiv.style.display !== "block") {
+	// 		targetDiv.style.display = "block";
+	// 	}
+    // };
+
+
+	
+</script>
+
+</body>
+</html>

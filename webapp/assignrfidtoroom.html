@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+<title>Assign RFID</title>
+<link rel="stylesheet" href="main.css" type="text/css">
+</head>
+
+<body>
+<section class="menu">
+    <nav>
+        <ul>
+            <li><a href="roominfo.html">Room info</a></li>
+            <li><a href="searchguests.html">Search guests</a></li>
+            <li><a href="assignrfidtoroom.html">Assign RFID to room</a></li><br><br><br>
+        </ul>
+    
+    </nav>
+</section>
+
+
+<div id="form"><br>
+    <label> RFID number:<br> <input type="text"></label><br><br>
+    <label> Room:<br> <input id ="saveInput" type="text"></label><br><br>
+    <input id="saveBtn" type="submit" value="Save"><br>
+</div>
+
+<script>
+    document.getElementById('saveBtn').onclick = function() {
+    //document.getElementById("saveInput").value
+};
+</script>
+
+</body>
+</html>
