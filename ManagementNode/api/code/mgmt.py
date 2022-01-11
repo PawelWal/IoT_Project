@@ -58,3 +58,11 @@ class Mgmt:
             result.append({"id": guest_id, "name": name, "surname": surname, "RFID": RFID_no, "phone": phone_no, "email": email})
         cur.close()
         return result
+
+    def get_rfids(self):
+        cur = self._conn.cursor()
+        cur.execute("SELECT id, RFID_no FROM RFIDs WHERE status=1")
+        pass
+
+    def get_rooms(self):
+        pass

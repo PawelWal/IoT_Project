@@ -33,16 +33,10 @@ for the table -->
     </nav>
 </section>
 
-<!-- <h1 id="Form">Formularz</h1>
-    <form method="post" action="http://localhost:8080/api/findGuest">
-        <p>
-            <label>Enter guest surname: </label>
-            <input id="idPass" name="Name" type="text" size="30" maxlength="50">
-        </p>
-	
+<div id="form"><br>
+	<label> Enter guest surname: <input id ="searchInput" type="text"></label>
 	<input id="search" type="submit" value="Search"><br><br><br>
-    
-    </form> -->
+</div>
 
 <div class="container" id="guestData">
 	
@@ -102,50 +96,9 @@ for Bootstrap table -->
 "https://unpkg.com/bootstrap-table@1.16.0/dist/bootstrap-table.min.js">
 </script>
 <script type="text/javascript">
-	// $(document).ready(function () {
-
-	// // Use the given data to create
-	// // the table and display it
-	// $('table').bootstrapTable({
-	// 	data: mydata
-	// });
-	// });
-
-	// Specify the JSON data to be displayed
+	$(document).ready(function () {
 	
-
-	
-	
-
-    // const data = JSON.stringify({
-    //     "surname": "Doe"
-    // });
-    
-	
-    // const userAction = async () => {
-    //     const response =  fetch('http://localhost:8080/api/countries');
-    // //const myJson = await response.json(); //extract JSON from the http response
-    // // do something with myJson
-	// var mydata =  response.json();
-	// console.log(mydata);
-    // }
-
-	let url = 'http://localhost:8080/api/countries';
-
-	fetch('http://localhost:8080/api/countries', {
-		method: "GET",
-		headers: {
-		'Content-Type': 'application/json'
-		}
-	}).then(res => res.json())
-		.then(out =>
-		console.log('Checkout this JSON! ', out))
-		.catch(err => console.log("err"));
-
-
-	
-	
-    var data = {"surname": "Doe"};
+	var data = {"surname": "Doe"};
 
     fetch('http://localhost:8080/api/findGuest', {
     method: "POST",
@@ -153,33 +106,37 @@ for Bootstrap table -->
 		'Content-Type': 'application/json'
 	},
     body: JSON.stringify(data)
-    }).then(res => {
-    console.log("Request complete! response:", res);
+    }).then(response=>response.json())
+		.then(data=>{$('table').bootstrapTable({
+						data: data});
+		});
     }); 
 
-
-	// fetch('http://localhost:8080/api/countries').then(function(response) {
-	// return response.json();
-	// }).then(function(data) {
-	// console.log(data);
-	// }).catch(function() {
-	// console.log("Booo");
-	// });
+	// Use the given data to create
+	// the table and display it
 	
-        
-    //var mydata = await response.json();
-
-    // document.getElementById('guestData').style.display = "none";
-
-    // const targetDiv = document.getElementById("guestData");
-    // const btn = document.getElementById("search");
-    // btn.onclick = function () {
-	// 	if (targetDiv.style.display !== "block") {
-	// 		targetDiv.style.display = "block";
-	// 	}
-    // };
+	/*$('table').bootstrapTable({
+		data: mydata
+	});
+	});*/
 
 
+	
+    document.getElementById('guestData').style.display = "none";
+
+	
+	function searchURL(){
+		window.location = "http://localhost:8080/api/getfindGuest/" + document.getElementById("searchInput").value;
+	}
+
+
+    const targetDiv = document.getElementById("guestData");
+    const btn = document.getElementById("search");
+    btn.onclick = function () {
+		if (targetDiv.style.display !== "block") {
+			targetDiv.style.display = "block";
+		}
+    };
 	
 </script>
 
