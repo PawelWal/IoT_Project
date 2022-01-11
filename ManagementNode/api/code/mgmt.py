@@ -51,7 +51,7 @@ class Mgmt:
 
     def find_guests(self, surname: str):
         cur = self._conn.cursor()
-        cmd = "SELECT DISTINCT Guests.id, name, surname, RFID_no, phone_no, email FROM Guests JOIN CheckIns ON Guests.id = CheckIns.FK_guest JOIN RFIDs ON RFIDs.id = CheckIns.FK_rfid WHERE surname='{0}'".format(surname)
+        cmd = "SELECT DISTINCT Guests.id, name, surname, RFID_no, phone_no, email FROM Guests LEFT JOIN CheckIns ON Guests.id = CheckIns.FK_guest LEFT JOIN RFIDs ON RFIDs.id = CheckIns.FK_rfid WHERE surname='{0}'".format(surname)
         cur.execute(cmd)
         result = []
         for guest_id, name, surname, RFID_no, phone_no, email in cur:
