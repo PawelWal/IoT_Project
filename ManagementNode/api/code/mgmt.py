@@ -1,4 +1,5 @@
 import mariadb
+import random
 
 
 class Mgmt:
@@ -62,7 +63,58 @@ class Mgmt:
     def get_rfids(self):
         cur = self._conn.cursor()
         cur.execute("SELECT id, RFID_no FROM RFIDs WHERE status=1")
-        pass
+        cards = []
+        for card_id, nbr in cur:
+            cards.append({"id": card_id, "RFID_no": nbr})
+        return cards
 
-    def get_rooms(self):
-        pass
+    def get_free_rooms(self):
+        cur = self._conn.cursor()
+        cur.execute("SELECT DISTINCT number FROM Rooms LEFT JOIN CheckIns ON Rooms.number = CheckIns.FK_room WHERE CheckIns.validUntil <= CURDATE() OR id is NULL")
+        rooms = []
+        for nbr in cur:
+            rooms.append(nbr[0])
+        return rooms
+
+    def __check_rfid(self, rfid_id: str):
+        for pair in self.get_rfids():
+            if pair["id"] == rfid_id:
+                return True
+        return False
+
+    def add_rfid_to_room(self, rfid_id: str, room_id: str):
+        cur = self._conn.cursor()
+        token = random.randint(10000, 100000)
+        if room_id in self.get_free_rooms() and self.__check_rfid(rfid_id):
+
+            cont = True
+            while cont:
+                if self.check_if_token_exists(token):
+                    token = random.randint(10000, 100000)
+                else:
+                    cont = False
+            cmd = "INSERT INTO Tokens VALUES({0}, {1}, {2}, {3}, CURDATE())".format(token, room_id, rfid_id, 1)
+            cur.execute(cmd)
+            cur.close()
+            if self.check_if_token_exists(token):
+                return {"token": token}
+
+    def check_if_token_exists(self, token_nbr: int):
+        cur = self._conn.cursor()
+        cmd = "SELECT id FROM Tokens WHERE id={0}".format(str(token_nbr))
+        cur.execute(cmd)
+        output = None
+        for nbr in cur:
+            output = nbr[0]
+        cur.close()
+        return output
+
+    def get_room_info(self, room_id: int):
+        cur = self._conn.cursor()
+        cmd = "SELECT Guests.id, name, surname, RFID_no, phone_no, email FROM Rooms JOIN CheckIns ON Rooms.number=CheckIns.FK_room JOIN RFIDs ON CheckIns.FK_rfid = RFIDs.id JOIN Guests ON CheckIns.FK_guest = Guests.id WHERE Rooms.number={0} AND (validUntil IS NULL OR validUntil >= CURDATE())".format(room_id)
+        cur.execute(cmd)
+        guest = {}
+        for g_id, name, surname, rfid, phone, email in cur:
+            guest = {"id": g_id, "name": name, "surname": surname, "RFID": rfid, "phone": phone, "email": email}
+        cur.close()
+        return guest
