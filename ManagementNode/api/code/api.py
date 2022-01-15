@@ -9,7 +9,7 @@ import app.mqtt_conn as mqtt
 
 app = FastAPI(root_path="/api")
 mn = Mgmt()
-mqtt.connect_to_broker("192.168.1.114")
+mqtt.connect_to_broker("192.168.0.66")
 
 class Section(BaseModel):
     name: str

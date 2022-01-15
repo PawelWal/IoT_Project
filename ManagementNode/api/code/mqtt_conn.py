@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+import ssl
 import paho.mqtt.client as mqtt
 from app.mgmt import Mgmt
 
@@ -7,8 +8,7 @@ OPEN = "open"
 ALARM = "alarm"
 CLOSE = "close"
 
-
-client = mqtt.Client()
+client = mqtt.Client("192.168.0.66")
 mn = Mgmt()
 
 def process_message(client, userdata, message):
@@ -24,7 +24,11 @@ def process_message(client, userdata, message):
             client.publish(message.topic + "/listen", CLOSE)
 
 def connect_to_broker(broker):
-    client.connect(broker, 1883, 600)
+    client.tls_set("/code/app/ca.crt", tls_version=ssl.PROTOCOL_TLSv1_2)
+    client.tls_insecure_set(True)
+
+    client.connect(broker, 8883, 600)
+    
     client.on_message = process_message
     client.loop_start()
     client.subscribe("room/+")

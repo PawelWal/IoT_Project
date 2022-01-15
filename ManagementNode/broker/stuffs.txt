@@ -1,0 +1,27 @@
+openssl req - generuje nam żądanie o klucz
+
+-x509 - generuje certyfikat root który się sam podpisuje
+-nodes - nie ma szyfrowania generowanych kluczy prywatnych, nie mogą być szyfrowane bo broker się nie będzie umiał
+przeczytać
+-sha256 - wybór algorytmu
+-newkey - generuje nowy certyfikat i klucz prywatny, przy okazji podajemy ze chcemy klucz rsa dlugosci 2048
+-subj - informacje o podmiocie
+-days - jak dlugo ma być aktywny ten certyfikat
+
+-keyout - klucz prywatny
+-out - certyfikat
+
+-new - robi certyfikat
+
+x509 - podpisuje certyfikat
+
+#############33
+
+
+openssl req -nodes -sha256 -new -subj "$gate" -keyout gate.key -out gate.csr 
+openssl x509 -req -sha256 -in gate.csr -CA ca.crt -CAkey ca.key -CAcreateserial -out gate.crt
+
+openssl req -nodes -sha256 -new -subj "$db_client" -keyout db_client.key -out db_client.csr 
+openssl x509 -req -sha256 -in db_client.csr -CA ca.crt -CAkey ca.key -CAcreateserial -out db_client.crt
+
+docker cp mqtt_broker:/mosquitto/certs/ca.crt .

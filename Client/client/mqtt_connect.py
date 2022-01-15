@@ -11,7 +11,7 @@ OPEN = "open"
 ALARM = "alarm"
 CLOSE = "close"
 
-client = mqtt.Client()
+client = mqtt.Client("hotel_cert")
 TEST_DATA = ['2344832389', '3820433859', '3326382912', '0093023738']
 
 def check_rfid(topic, rfid_nbr):
@@ -30,7 +30,9 @@ def process_message(client, userdata, message):
         print("Gate {0}, keep close, not registered card".format(gate))
 
 def connect_to_broker():
-    client.connect(sys.argv[1], 1883, 600)
+    client.tls_set('/code/ca.crt')
+    client.connect(sys.argv[1], 8883, 600)
+    
     client.on_message = process_message
     client.loop_start()
     topic = "room/{0}/listen".format(sys.argv[2])
