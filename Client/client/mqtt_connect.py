@@ -5,10 +5,7 @@ import paho.mqtt.client as mqtt
 import sys
 from random import randint
 from time import sleep
-<<<<<<< HEAD
 import ssl
-=======
->>>>>>> ff18b558cbe5997be0e3703a9a93fe7cac49b28f
 from paho.mqtt.client import MQTTv311
 
 START_RFID_NBR = 2344832000
@@ -36,17 +33,10 @@ def process_message(client, userdata, message):
         print("Gate {0}, keep close, not registered card".format(gate))
 
 def connect_to_broker():
-<<<<<<< HEAD
     client.tls_set(ca_certs="/code/ca.crt", certfile="/code/client.crt", keyfile="/code/client.key",
                    tls_version=ssl.PROTOCOL_SSLv23, ciphers=None, cert_reqs=ssl.CERT_NONE)
     client.username_pw_set("gate1", "1234")
     client.connect(sys.argv[1], 8883, 600)
-=======
-    client.tls_set(ca_certs="/code/ca.crt", certfile="/code/client.crt", keyfile="/code/client.key", tls_version=ssl.PROTOCOL_SSLv23, ciphers=None, cert_reqs=ssl.CERT_NONE)
-    client.username_pw_set("gate1", "1234")
-    client.connect(sys.argv[1], 8883, 600)
-    
->>>>>>> ff18b558cbe5997be0e3703a9a93fe7cac49b28f
     client.on_message = process_message
     client.loop_start()
     topic = "room/{0}/listen".format(sys.argv[2])
