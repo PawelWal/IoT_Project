@@ -6,7 +6,7 @@ services:
     container_name: mqtt_broker
     build: broker
     ports:
-      - "1883:1883"
+      - "8883:8883"
     networks:
       - backend
     
