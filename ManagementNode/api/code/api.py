@@ -11,7 +11,7 @@ import app.mqtt_conn as mqtt
 
 app = FastAPI(root_path="/api")
 mn = Mgmt()
-mqtt.connect_to_broker("192.168.0.66")
+mqtt.connect_to_broker("hotel.domain")
 
 origins = ['*']
 app.add_middleware(

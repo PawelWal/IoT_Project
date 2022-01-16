@@ -25,7 +25,8 @@ def process_message(client, userdata, message):
             client.publish(message.topic + "/listen", CLOSE, 1)
 
 def connect_to_broker(broker):
-    client.tls_set(ca_certs="/code/app/ca.crt", certfile="/code/app/client.crt", keyfile="/code/app/client.key", tls_version=ssl.PROTOCOL_SSLv23, ciphers=None, cert_reqs=ssl.CERT_NONE)
+    client.tls_set(ca_certs="/code/app/ca.crt", certfile="/code/app/client.crt", keyfile="/code/app/client.key",
+                   tls_version=ssl.PROTOCOL_SSLv23, ciphers=None, cert_reqs=ssl.CERT_NONE)
     client.username_pw_set("mgmt", "1234")
     client.connect(broker, 8883, 600)
     
