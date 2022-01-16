@@ -113,8 +113,8 @@ class Mgmt:
         cur = self._conn.cursor()
         cmd = "SELECT Guests.id, name, surname, RFID_no, phone_no, email FROM Rooms JOIN CheckIns ON Rooms.number=CheckIns.FK_room JOIN RFIDs ON CheckIns.FK_rfid = RFIDs.id JOIN Guests ON CheckIns.FK_guest = Guests.id WHERE Rooms.number={0} AND (validUntil IS NULL OR validUntil >= CURDATE())".format(room_id)
         cur.execute(cmd)
-        guest = {}
+        guest = []
         for g_id, name, surname, rfid, phone, email in cur:
-            guest = {"id": g_id, "name": name, "surname": surname, "RFID": rfid, "phone": phone, "email": email}
+            guest.append({"id": g_id, "name": name, "surname": surname, "RFID": rfid, "phone": phone, "email": email})
         cur.close()
         return guest
