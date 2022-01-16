@@ -1,9 +1,11 @@
 #!/usr/bin/env python3
 
+import ssl
 import paho.mqtt.client as mqtt
 import sys
 from random import randint
 from time import sleep
+from paho.mqtt.client import MQTTv311
 
 START_RFID_NBR = 2344832000
 
@@ -11,7 +13,7 @@ OPEN = "open"
 ALARM = "alarm"
 CLOSE = "close"
 
-client = mqtt.Client()
+client = mqtt.Client("gate1", protocol=MQTTv311)
 TEST_DATA = ['2344832389', '3820433859', '3326382912', '0093023738']
 
 def check_rfid(topic, rfid_nbr):
@@ -30,7 +32,10 @@ def process_message(client, userdata, message):
         print("Gate {0}, keep close, not registered card".format(gate))
 
 def connect_to_broker():
-    client.connect(sys.argv[1], 1883, 600)
+    client.tls_set(ca_certs="/code/ca.crt", certfile="/code/client.crt", keyfile="/code/client.key", tls_version=ssl.PROTOCOL_SSLv23, ciphers=None, cert_reqs=ssl.CERT_NONE)
+    client.username_pw_set("gate1", "1234")
+    client.connect(sys.argv[1], 8883, 600)
+    
     client.on_message = process_message
     client.loop_start()
     topic = "room/{0}/listen".format(sys.argv[2])
