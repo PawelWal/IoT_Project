@@ -29,7 +29,7 @@ def connect_to_broker(broker):
                    tls_version=ssl.PROTOCOL_SSLv23, ciphers=None, cert_reqs=ssl.CERT_NONE)
     client.username_pw_set("mgmt", "1234")
     client.connect(broker, 8883, 600)
-    
+
     client.on_message = process_message
     client.loop_start()
     client.subscribe("room/+", qos=1)

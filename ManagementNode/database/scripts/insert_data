@@ -23,12 +23,12 @@ INSERT INTO Countries (name) VALUES
 ('United Kingdom'),
 ('United States');
 
-INSERT INTO Guests (name, surname, document_no, phone_no, email, address, zip_code, city, FK_country) VALUES
-	('John', 'Doe', 'ABC123456', 123456789, 'john.doe@gmail.com', '55 Gresham St', 'E1 7AY', 'London', 20),
-	('Jan', 'Kowalski', 'DEF346293', 948374348, 'jan.kowalski@cybernet.com.pl', 'Strumykowa 15', '51-348', 'Wroclaw', 15),
-	('Karolina', 'Kowalska', 'WEC473028', 452838457, 'k.karolina@gmail.com', 'Powstancow Slaskich 78/2', '34-324', 'Warszawa', 15),
-	('Beth', 'Harmon', 'DFC354282', 679123644, 'harmon.beth@gmail.com', '445 Park Ave', '10022', 'New York', 21),
-	('Enzo', 'Cedrone', 'VND232134', 594243484, 'cedrone.e@gmail.com', 'Via dei Girasoli', '00172', 'Roma', 13);
+INSERT INTO Guests (email, password, name, surname, document_no, phone_no, address, zip_code, city, FK_country) VALUES
+('john.doe@gmail.com', 'p@ssw0rd', 'John', 'Doe', 'ABC123456', 123456789, '55 Gresham St', 'E1 7AY', 'London', 20),
+('jan.kowalski@cybernet.com.pl', 'p@ssw0rd', 'Jan', 'Kowalski', 'DEF346293', 948374348, 'Strumykowa 15', '51-348', 'Wroclaw', 15),
+('k.karolina@gmail.com', 'p@ssw0rd', 'Karolina', 'Kowalska', 'WEC473028', 452838457, 'Powstancow Slaskich 78/2', '34-324', 'Warszawa', 15),
+('harmon.beth@gmail.com', 'p@ssw0rd', 'Beth', 'Harmon', 'DFC354282', 679123644, '445 Park Ave', '10022', 'New York', 21),
+('cedrone.e@gmail.com', 'p@ssw0rd', 'Enzo', 'Cedrone', 'VND232134', 594243484, 'Via dei Girasoli', '00172', 'Roma', 13);
 
 INSERT INTO Rooms VALUES 
 (),

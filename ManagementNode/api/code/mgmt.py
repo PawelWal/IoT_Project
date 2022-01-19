@@ -10,8 +10,43 @@ class Mgmt:
             host="database",
             database="hotel")
 
+    def check_in(self, guest_id: int, token: int):
+        if self.check_if_token_exists(token) and guest_id <= self.__get_last_guest_id():
+            check_ins_numb = self.get_one_parameter_list("SELECT COUNT(id) FROM CheckIns")[0]
+            cmd = "SELECT FK_room, FK_rfid FROM Tokens WHERE id={0}".format(token)
+            cur = self._conn.cursor()
+            cur.execute(cmd)
+            room_id, rfid_id = None, None
+            for room, rfid in cur:
+                room_id = room
+                rfid_id = rfid
+            cur.close
+            if room_id and room_id:
+                cur = self._conn.cursor()
+                cmd2 = "INSERT INTO CheckIns (FK_room, FK_guest, FK_rfid, " \
+                       "validSince, validUntil) Values({0}, {1}, {2},NOW(),NULL)".format(room_id, guest_id, rfid_id)
+                cur.execute(cmd2)
+                cur.close()
+                if check_ins_numb + 1 == self.get_one_parameter_list("SELECT COUNT(id) FROM CheckIns")[0]:
+                    self._conn.commit()
+                    return {"result": "success"}
+        return {"result": "fail"}
+
+
     def block_rfid_card(self, guest_id: int):
-        pass
+        rfid = self.get_guest_card(guest_id)
+        if rfid:
+            rfid = rfid["rfid"]
+            cmd = "UPDATE RFIDs SET status=0 WHERE RFID_no='{0}'".format(rfid)
+            cur = self._conn.cursor()
+            cur.execute(cmd)
+            cur.close
+            # validate
+            cmd = "SELECT status FROM RFIDs WHERE RFID_no='{0}'".format(rfid)
+            if 0 in self.get_one_parameter_list(cmd):
+                return {"result": "blocked"}
+        return {"result": "fail"}
+
 
     def get_countries(self):
         cur = self._conn.cursor()
@@ -23,18 +58,44 @@ class Mgmt:
         return countries
 
     def add_guest(self, name: str, surname: str, doc_no: str, phone: int, email: str,
-                  address: str, zip_code: str, city: str, country_code: int):
-        guest_id = 1
-        return guest_id
+                  address: str, zip_code: str, city: str, country_code: int, password: str):
+        if country_code in self.get_countries().keys():
+            guest_id = self.__get_last_guest_id() + 1
+            cur = self._conn.cursor()
+            cmd = "INSERT INTO Guests VALUES({0}, '{1}', '{2}', '{3}', '{4}', {5}, '{6}', '{7}', '{8}','{9}', {10})".format(
+                guest_id, password, name, surname, doc_no, phone, email, address, zip_code, city, country_code)
+            cur.execute(cmd)
+            cur.close()
+            if guest_id == self.__get_last_guest_id():
+                self._conn.commit()
+                return {"guest_id": guest_id}
+        return {"guest_id": -1}
 
     def get_guest(self, guest_id: int):
-        pass
+        result = {}
+        if guest_id in self.get_one_parameter_list("SELECT id FROM Guests"):
+            cmd = "SELECT Guests.name, surname, document_no, phone_no, email, address, zip_code, city, Countries.name  " \
+                  "FROM Guests JOIN Countries ON Guests.FK_country = Countries.id WHERE Guests.id={0}".format(guest_id)
+            cur = self._conn.cursor()
+            cur.execute(cmd)
+            for name, sur, doc, pho, ema, add, code, cit, country in cur:
+                result = {"name": name, "surname": sur, "document_no": doc,
+                          "phone_no": pho, "email": ema, "address": add,
+                          "zip_code": code, "city": cit, "country": country}
+            cur.close()
+        return result
 
-    def assign_room(self, guest_id: int, room_id: int):
-        pass
+
+    def __get_last_guest_id(self):
+        return self.get_one_parameter_list("SELECT COUNT(id) FROM Guests")[0]
 
     def get_guest_card(self, guest_id: int):
-        pass
+        cmd = "SELECT RFID_no FROM RFIDs JOIN CheckIns ON RFIDs.id = CheckIns.FK_rfid WHERE CheckIns.FK_guest = {0} AND (validUntil >= NOW() OR validUntil IS NULL)".format(guest_id)
+        numbers = self.get_one_parameter_list(cmd)
+        if numbers:
+            return {"rfid": numbers[0]}
+        else:
+            return {}
 
     def check_rfid(self, rfid_nbr: int):
         cur = self._conn.cursor()
@@ -86,7 +147,6 @@ class Mgmt:
         cur = self._conn.cursor()
         token = random.randint(10000, 100000)
         if room_id in self.get_free_rooms() and self.__check_rfid(rfid_id):
-
             cont = True
             while cont:
                 if self.check_if_token_exists(token):
@@ -97,6 +157,7 @@ class Mgmt:
             cur.execute(cmd)
             cur.close()
             if self.check_if_token_exists(token):
+                self._conn.commit()
                 return {"token": token}
 
     def check_if_token_exists(self, token_nbr: int):
@@ -118,3 +179,12 @@ class Mgmt:
             guest.append({"id": g_id, "name": name, "surname": surname, "RFID": rfid, "phone": phone, "email": email})
         cur.close()
         return guest
+
+    def get_one_parameter_list(self, command: str):
+        cur = self._conn.cursor()
+        cur.execute(command)
+        some_list = []
+        for name in cur:
+            some_list.append(name[0])
+        cur.close()
+        return some_list

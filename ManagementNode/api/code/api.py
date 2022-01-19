@@ -32,10 +32,24 @@ class RfidToRoom(BaseModel):
 class Room(BaseModel):
     room_id: int
 
+class Guest(BaseModel):
+    guest_id: int
 
-@app.get("/")
-def read_root():
-    return {"Hello": "World"}
+class NewGuest(BaseModel):
+    email: str
+    name: str
+    surname: str
+    password: str
+    doc_no: str
+    phone_no: int
+    address: str
+    zip_code: str
+    city: str
+    country_code: int
+
+class CheckIn(BaseModel):
+    token: int
+    guest_id: int
 
 @app.post("/countries")
 def get_countries():
@@ -60,3 +74,24 @@ def get_free_rooms():
 @app.post("/getRoomInfo")
 def get_room_info(room: Room):
     return mn.get_room_info(room.room_id)
+
+@app.post("/getGuestRfid")
+def get_guest_rfid(guest: Guest):
+    return mn.get_guest_card(guest.guest_id)
+
+@app.post("/blockCard")
+def block_rfid_card(guest: Guest):
+    return mn.block_rfid_card(guest.guest_id)
+
+@app.post("/addGuest")
+def add_guest(guest: NewGuest):
+    return mn.add_guest(guest.name, guest.surname, guest.doc_no, guest.phone_no, guest.email,
+                  guest.address, guest.zip_code, guest.city, guest.country_code, guest.password)
+
+@app.post("/getGuest")
+def get_guest(guest: Guest):
+    return mn.get_guest(guest.guest_id)
+
+@app.post("/checkIN")
+def check_in(checkIn: CheckIn):
+    return mn.check_in(checkIn.guest_id, checkIn.token)
