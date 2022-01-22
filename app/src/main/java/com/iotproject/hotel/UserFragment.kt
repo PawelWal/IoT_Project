@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.android.volley.Request
 import com.android.volley.RequestQueue
 import com.android.volley.toolbox.JsonObjectRequest
@@ -17,7 +18,7 @@ import org.json.JSONObject
 class UserFragment : Fragment() {
 
     var requestQueue: RequestQueue? = null
-    var requestQueue2: RequestQueue? = null
+    var requestQueueGuest: RequestQueue? = null
     var countriesList = mutableListOf<String>()
     var countriesCodesMap = HashMap<Int, String>()
 
@@ -28,16 +29,13 @@ class UserFragment : Fragment() {
         val urlCountries = BASEURL + "countries"
         requestQueue = Volley.newRequestQueue(requireContext())
         val jsonObjectRequest = JsonObjectRequest(Request.Method.POST, urlCountries, null,
-                { response ->
-                    parseJson(response, volleyListener)
-                }, { error ->
-            error.printStackTrace()
-        })
+                { response -> parseJson(response, volleyListener) },
+                { error -> error.printStackTrace() })
         requestQueue?.add(jsonObjectRequest)
     }
 
     private fun parseJson(response: JSONObject, volleyListener: VolleyListener){
-        for (i in 1 until response.length()){
+        for (i in 1..response.length()){
             val country = response.getString(i.toString())
             countriesList.add(country)
             countriesCodesMap[i] = country
@@ -45,20 +43,18 @@ class UserFragment : Fragment() {
         volleyListener.onResponseReceived()
     }
 
-    private fun addGuest(guestJson: JSONObject){
+    private fun addGuest(volleyListener: VolleyListener, guestJson: JSONObject){
         val urlAddGuest = BASEURL + "addGuest"
-        requestQueue2 = Volley.newRequestQueue(requireContext())
+        requestQueueGuest = Volley.newRequestQueue(requireContext())
         val jsonObjectRequest = JsonObjectRequest(Request.Method.POST, urlAddGuest, guestJson,
-            { response -> Toast.makeText(
-                activity,
-                "Saved to database",
-                Toast.LENGTH_SHORT
-            ).show()
+            { response -> guestAdded(volleyListener) },
+                { error -> error.printStackTrace() })
+        requestQueueGuest?.add(jsonObjectRequest)
+    }
 
-            }, { error ->
-                error.printStackTrace()
-            })
-        requestQueue2?.add(jsonObjectRequest)
+    private fun guestAdded(volleyListener: VolleyListener){
+        Toast.makeText(activity, "Data saved", Toast.LENGTH_SHORT).show()
+        volleyListener.onResponseReceived()
     }
 
 
@@ -119,8 +115,13 @@ class UserFragment : Fragment() {
             guestJsonObject.put("city", guestCity)
             guestJsonObject.put("country_code", guestCountryCode)
 
-            addGuest(guestJsonObject)
+            val volleyListenerGuest: VolleyListener = object : VolleyListener {
+                override fun onResponseReceived() {
+                    findNavController().navigate(R.id.action_userFragment_to_checkInFragment)
+                }
+            }
 
+            addGuest(volleyListenerGuest, guestJsonObject)
         }
     }
 }
