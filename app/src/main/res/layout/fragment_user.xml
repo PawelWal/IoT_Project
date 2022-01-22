@@ -34,6 +34,7 @@
                 android:contentDescription="@string/user_description" />
 
             <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/nameTextField"
                 android:layout_width="300dp"
                 android:layout_height="wrap_content"
                 android:hint="@string/nameLabel"
@@ -42,7 +43,6 @@
                 android:layout_columnSpan="2" >
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/nameTextField"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="text" />
@@ -50,6 +50,7 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/surnameTextField"
                 android:layout_width="300dp"
                 android:layout_height="wrap_content"
                 android:hint="@string/surnameLabel"
@@ -59,7 +60,6 @@
                 android:layout_columnSpan="2" >
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/surnameTextField"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="text" />
@@ -67,6 +67,7 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/documentTextField"
                 android:layout_width="300dp"
                 android:layout_height="wrap_content"
                 android:hint="@string/documentLabel"
@@ -76,7 +77,6 @@
                 android:layout_columnSpan="2">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/documentTextField"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="text" />
@@ -96,6 +96,7 @@
                 android:contentDescription="@string/phone_description" />
 
             <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/phoneTextField"
                 android:layout_width="300dp"
                 android:layout_height="wrap_content"
                 android:hint="@string/phoneLabel"
@@ -105,7 +106,6 @@
                 android:layout_columnSpan="2" >
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/phoneTextField"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="phone" />
@@ -125,6 +125,7 @@
                 android:contentDescription="@string/message_description" />
 
             <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/emailTextField"
                 android:layout_width="300dp"
                 android:layout_height="wrap_content"
                 android:hint="@string/emailLabel"
@@ -134,7 +135,6 @@
                 android:layout_columnSpan="2" >
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/emailTextField"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="textEmailAddress" />
@@ -154,6 +154,7 @@
                 android:contentDescription="@string/home_description" />
 
             <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/addressTextField"
                 android:layout_width="300dp"
                 android:layout_height="wrap_content"
                 android:hint="@string/addressLabel"
@@ -163,7 +164,6 @@
                 android:layout_columnSpan="2" >
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/addressTextField"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="text" />
@@ -171,6 +171,7 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/cityTextField"
                 android:layout_width="190dp"
                 android:layout_height="wrap_content"
                 android:hint="@string/cityLabel"
@@ -179,14 +180,14 @@
                 android:layout_row="7" >
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/cityTextField"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="phone" />
+                    android:inputType="text" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/codeTextField"
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
                 android:hint="@string/codeLabel"
@@ -196,7 +197,6 @@
                 android:layout_marginStart="10dp" >
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/codeTextField"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="text" />

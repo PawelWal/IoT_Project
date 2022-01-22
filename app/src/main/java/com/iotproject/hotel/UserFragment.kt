@@ -17,10 +17,15 @@ import org.json.JSONObject
 class UserFragment : Fragment() {
 
     var requestQueue: RequestQueue? = null
+    var requestQueue2: RequestQueue? = null
     var countriesList = mutableListOf<String>()
+    var countriesCodesMap = HashMap<Int, String>()
+
+    // TODO - get ip address from computer
+    val BASEURL = "http://192.168.1.27:8080/api/"
 
     private fun getJsonDataFromApi(volleyListener: VolleyListener){
-        val urlCountries = "http://192.168.0.101:8080/api/countries"
+        val urlCountries = BASEURL + "countries"
         requestQueue = Volley.newRequestQueue(requireContext())
         val jsonObjectRequest = JsonObjectRequest(Request.Method.POST, urlCountries, null,
                 { response ->
@@ -33,10 +38,29 @@ class UserFragment : Fragment() {
 
     private fun parseJson(response: JSONObject, volleyListener: VolleyListener){
         for (i in 1 until response.length()){
-            countriesList.add(response.getString(i.toString()))
+            val country = response.getString(i.toString())
+            countriesList.add(country)
+            countriesCodesMap[i] = country
         }
         volleyListener.onResponseReceived()
     }
+
+    private fun addGuest(guestJson: JSONObject){
+        val urlAddGuest = BASEURL + "addGuest"
+        requestQueue2 = Volley.newRequestQueue(requireContext())
+        val jsonObjectRequest = JsonObjectRequest(Request.Method.POST, urlAddGuest, guestJson,
+            { response -> Toast.makeText(
+                activity,
+                "Saved to database",
+                Toast.LENGTH_SHORT
+            ).show()
+
+            }, { error ->
+                error.printStackTrace()
+            })
+        requestQueue2?.add(jsonObjectRequest)
+    }
+
 
     override fun onCreateView(
             inflater: LayoutInflater,
@@ -49,14 +73,14 @@ class UserFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val inputName: TextView = view.findViewById(R.id.nameTextField)
-        val inputSurname: TextView = view.findViewById(R.id.surnameTextField)
-        val inputDocument: TextView = view.findViewById(R.id.documentTextField)
-        val inputPhone: TextView = view.findViewById(R.id.phoneTextField)
-        val inputEmail: TextView = view.findViewById(R.id.emailTextField)
-        val inputAddress: TextView = view.findViewById(R.id.addressTextField)
-        val inputCity: TextView = view.findViewById(R.id.cityTextField)
-        val inputCode: TextView = view.findViewById(R.id.codeTextField)
+        val inputName: TextInputLayout = view.findViewById(R.id.nameTextField)
+        val inputSurname: TextInputLayout = view.findViewById(R.id.surnameTextField)
+        val inputDocument: TextInputLayout = view.findViewById(R.id.documentTextField)
+        val inputPhone: TextInputLayout = view.findViewById(R.id.phoneTextField)
+        val inputEmail: TextInputLayout = view.findViewById(R.id.emailTextField)
+        val inputAddress: TextInputLayout = view.findViewById(R.id.addressTextField)
+        val inputCity: TextInputLayout = view.findViewById(R.id.cityTextField)
+        val inputCode: TextInputLayout = view.findViewById(R.id.codeTextField)
 
         val inputCountry: TextInputLayout = view.findViewById(R.id.countryTextField)
 
@@ -69,14 +93,34 @@ class UserFragment : Fragment() {
 
         getJsonDataFromApi(volleyListener)
 
-        // TODO - change listener
         val buttonSave: Button = view.findViewById(R.id.saveButton)
         buttonSave.setOnClickListener {
-            Toast.makeText(
-                    activity,
-                    "saving to database (table Guests) happens now",
-                    Toast.LENGTH_SHORT
-            ).show()
+
+            // TODO - data validation
+            val guestName = inputName.editText?.text.toString()
+            val guestSurname = inputSurname.editText?.text.toString()
+            val guestDocument = inputDocument.editText?.text.toString()
+            val guestPhone = inputPhone.editText?.text.toString()
+            val guestEmail = inputEmail.editText?.text.toString()
+            val guestAddress = inputAddress.editText?.text.toString()
+            val guestCity = inputCity.editText?.text.toString()
+            val guestCode = inputCode.editText?.text.toString()
+            val guestCountry = inputCountry.editText?.text.toString()
+            val guestCountryCode = countriesCodesMap.filterValues { it == guestCountry }.keys.first().toInt()
+
+            val guestJsonObject = JSONObject()
+            guestJsonObject.put("email", guestEmail)
+            guestJsonObject.put("name", guestName)
+            guestJsonObject.put("surname", guestSurname)
+            guestJsonObject.put("doc_no", guestDocument)
+            guestJsonObject.put("phone_no", guestPhone)
+            guestJsonObject.put("address", guestAddress)
+            guestJsonObject.put("zip_code", guestCode)
+            guestJsonObject.put("city", guestCity)
+            guestJsonObject.put("country_code", guestCountryCode)
+
+            addGuest(guestJsonObject)
+
         }
     }
 }
