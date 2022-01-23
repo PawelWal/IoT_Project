@@ -26,10 +26,10 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/addCardText"
-        app:layout_constraintBottom_toTopOf="@id/outlinedTextFieldCard" />
+        app:layout_constraintBottom_toTopOf="@id/outlinedTextFieldToken" />
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/outlinedTextFieldCard"
+        android:id="@+id/outlinedTextFieldToken"
         android:layout_width="350dp"
         android:layout_height="wrap_content"
         android:hint="@string/token"
@@ -57,7 +57,7 @@
         android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/outlinedTextFieldCard"
+        app:layout_constraintTop_toBottomOf="@id/outlinedTextFieldToken"
         app:layout_constraintBottom_toBottomOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

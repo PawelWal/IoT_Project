@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.android.volley.Request
@@ -21,6 +22,7 @@ class UserFragment : Fragment() {
     var requestQueueGuest: RequestQueue? = null
     var countriesList = mutableListOf<String>()
     var countriesCodesMap = HashMap<Int, String>()
+    var guestId: Int = 0
 
     // TODO - get ip address from computer
     val BASEURL = "http://192.168.1.27:8080/api/"
@@ -47,16 +49,16 @@ class UserFragment : Fragment() {
         val urlAddGuest = BASEURL + "addGuest"
         requestQueueGuest = Volley.newRequestQueue(requireContext())
         val jsonObjectRequest = JsonObjectRequest(Request.Method.POST, urlAddGuest, guestJson,
-            { response -> guestAdded(volleyListener) },
+            { response -> guestAdded(response, volleyListener) },
                 { error -> error.printStackTrace() })
         requestQueueGuest?.add(jsonObjectRequest)
     }
 
-    private fun guestAdded(volleyListener: VolleyListener){
+    private fun guestAdded(response: JSONObject, volleyListener: VolleyListener){
         Toast.makeText(activity, "Data saved", Toast.LENGTH_SHORT).show()
+        guestId = response.getInt("guest_id")
         volleyListener.onResponseReceived()
     }
-
 
     override fun onCreateView(
             inflater: LayoutInflater,
@@ -117,6 +119,7 @@ class UserFragment : Fragment() {
 
             val volleyListenerGuest: VolleyListener = object : VolleyListener {
                 override fun onResponseReceived() {
+                    parentFragmentManager.setFragmentResult("requestKeyId", bundleOf("bundleKeyId" to guestId))
                     findNavController().navigate(R.id.action_userFragment_to_checkInFragment)
                 }
             }
