@@ -39,7 +39,6 @@ class NewGuest(BaseModel):
     email: str
     name: str
     surname: str
-    password: str
     doc_no: str
     phone_no: int
     address: str
@@ -49,6 +48,9 @@ class NewGuest(BaseModel):
 
 class CheckIn(BaseModel):
     token: int
+    guest_id: int
+
+class CheckOut(BaseModel):
     guest_id: int
 
 @app.post("/countries")
@@ -86,7 +88,7 @@ def block_rfid_card(guest: Guest):
 @app.post("/addGuest")
 def add_guest(guest: NewGuest):
     return mn.add_guest(guest.name, guest.surname, guest.doc_no, guest.phone_no, guest.email,
-                  guest.address, guest.zip_code, guest.city, guest.country_code, guest.password)
+                  guest.address, guest.zip_code, guest.city, guest.country_code)
 
 @app.post("/getGuest")
 def get_guest(guest: Guest):
@@ -95,3 +97,7 @@ def get_guest(guest: Guest):
 @app.post("/checkIN")
 def check_in(checkIn: CheckIn):
     return mn.check_in(checkIn.guest_id, checkIn.token)
+
+@app.post("/checkOut")
+def check_out(guest: CheckOut):
+    return mn.check_out(guest.guest_id)

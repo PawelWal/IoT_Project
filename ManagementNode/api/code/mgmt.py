@@ -32,6 +32,17 @@ class Mgmt:
                     return {"result": "success"}
         return {"result": "fail"}
 
+    def check_out(self, guest_id: int):
+        if guest_id <= self.__get_last_guest_id():
+            cmd = "UPDATE CheckIns SET validUntil=SYSDATE() WHERE FK_guest={0} AND validUntil is NULL".format(guest_id)
+            cur = self._conn.cursor()
+            cur.execute(cmd)
+            cur.close()
+            cmd2 = "SELECT FK_guest FROM CheckIns WHERE FK_guest={0} AND validUntil is NULL".format(guest_id)
+            if not self.get_one_parameter_list(cmd2):
+                self._conn.commit()
+                return {"result": "success"}
+        return {"result": "fail"}
 
     def block_rfid_card(self, guest_id: int):
         rfid = self.get_guest_card(guest_id)
@@ -44,6 +55,7 @@ class Mgmt:
             # validate
             cmd = "SELECT status FROM RFIDs WHERE RFID_no='{0}'".format(rfid)
             if 0 in self.get_one_parameter_list(cmd):
+                self._conn.commit()
                 return {"result": "blocked"}
         return {"result": "fail"}
 
@@ -58,12 +70,12 @@ class Mgmt:
         return countries
 
     def add_guest(self, name: str, surname: str, doc_no: str, phone: int, email: str,
-                  address: str, zip_code: str, city: str, country_code: int, password: str):
+                  address: str, zip_code: str, city: str, country_code: int):
         if country_code in self.get_countries().keys():
             guest_id = self.__get_last_guest_id() + 1
             cur = self._conn.cursor()
-            cmd = "INSERT INTO Guests VALUES({0}, '{1}', '{2}', '{3}', '{4}', {5}, '{6}', '{7}', '{8}','{9}', {10})".format(
-                guest_id, password, name, surname, doc_no, phone, email, address, zip_code, city, country_code)
+            cmd = "INSERT INTO Guests VALUES({0}, '{1}', '{2}', '{3}', '{4}', '{5}', '{6}', '{7}', '{8}', {9})".format(
+                guest_id, name, surname, doc_no, phone, email, address, zip_code, city, country_code)
             cur.execute(cmd)
             cur.close()
             if guest_id == self.__get_last_guest_id():
