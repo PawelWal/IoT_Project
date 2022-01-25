@@ -13,19 +13,23 @@ class Mgmt:
     def check_in(self, guest_id: int, token: int):
         if self.check_if_token_exists(token) and guest_id <= self.__get_last_guest_id():
             check_ins_numb = self.get_one_parameter_list("SELECT COUNT(id) FROM CheckIns")[0]
-            cmd = "SELECT FK_room, FK_rfid FROM Tokens WHERE id={0}".format(token)
+            cmd = "SELECT FK_room, FK_rfid FROM Tokens WHERE id={0} and status=1".format(token)
             cur = self._conn.cursor()
             cur.execute(cmd)
             room_id, rfid_id = None, None
             for room, rfid in cur:
                 room_id = room
                 rfid_id = rfid
-            cur.close
-            if room_id and room_id:
+            cur.close()
+            if room_id and rfid_id:
                 cur = self._conn.cursor()
                 cmd2 = "INSERT INTO CheckIns (FK_room, FK_guest, FK_rfid, " \
                        "validSince, validUntil) Values({0}, {1}, {2},NOW(),NULL)".format(room_id, guest_id, rfid_id)
                 cur.execute(cmd2)
+                cur.close()
+                cur = self._conn.cursor()
+                cmd3 = "UPDATE TOKENS SET status=0 WHERE id={0}".format(token);
+                cur.execute(cmd3)
                 cur.close()
                 if check_ins_numb + 1 == self.get_one_parameter_list("SELECT COUNT(id) FROM CheckIns")[0]:
                     self._conn.commit()
