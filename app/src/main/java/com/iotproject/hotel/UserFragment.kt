@@ -1,5 +1,6 @@
 package com.iotproject.hotel
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -14,6 +15,7 @@ import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
 import com.google.android.material.textfield.TextInputLayout
 import org.json.JSONObject
+import androidx.core.content.edit
 
 
 class UserFragment : Fragment() {
@@ -25,7 +27,7 @@ class UserFragment : Fragment() {
     var guestId: Int = 0
 
     // TODO - get ip address from computer
-    val BASEURL = "http://192.168.1.27:8080/api/"
+    val BASEURL = "http://192.168.0.100:8080/api/"
 
     private fun getJsonDataFromApi(volleyListener: VolleyListener){
         val urlCountries = BASEURL + "countries"
@@ -119,7 +121,11 @@ class UserFragment : Fragment() {
 
             val volleyListenerGuest: VolleyListener = object : VolleyListener {
                 override fun onResponseReceived() {
-                    parentFragmentManager.setFragmentResult("requestKeyId", bundleOf("bundleKeyId" to guestId))
+                    val preferences = androidx.preference.PreferenceManager.getDefaultSharedPreferences(requireContext())
+                    preferences.edit {
+                        putInt("guest_id", guestId)
+                        putBoolean("checked_in", false)
+                    }
                     findNavController().navigate(R.id.action_userFragment_to_checkInFragment)
                 }
             }

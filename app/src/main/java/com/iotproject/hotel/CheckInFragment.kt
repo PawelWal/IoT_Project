@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import androidx.core.content.edit
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.android.volley.Request
@@ -18,7 +19,7 @@ class CheckInFragment : Fragment() {
 
     var requestQueue: RequestQueue? = null
 
-    val BASEURL = "http://192.168.1.27:8080/api/"
+    val BASEURL = "http://192.168.0.100:8080/api/"
 
     private fun checkIn(volleyListener: VolleyListener, checkInJson: JSONObject){
         val urlAddGuest = BASEURL + "checkIN"
@@ -43,18 +44,18 @@ class CheckInFragment : Fragment() {
 
         val inputToken: TextInputLayout = view.findViewById(R.id.outlinedTextFieldToken)
 
+        val preferences = androidx.preference.PreferenceManager.getDefaultSharedPreferences(requireContext())
+
         val volleyListener: VolleyListener = object : VolleyListener {
             override fun onResponseReceived() {
+                preferences.edit {
+                    putBoolean("checked_in", true)
+                }
                 findNavController().navigate(R.id.action_checkInFragment_to_roomCardFragment)
             }
         }
 
-        var guestId = 0
-
-        parentFragmentManager.setFragmentResultListener("requestKeyId", viewLifecycleOwner){
-            requestKey, bundle ->
-            guestId = bundle.getInt("bundleKeyId")
-        }
+        val guestId = preferences.getInt("guest_id", 0)
 
         val buttonCheckIn: Button = view.findViewById(R.id.checkInButton)
         buttonCheckIn.setOnClickListener {

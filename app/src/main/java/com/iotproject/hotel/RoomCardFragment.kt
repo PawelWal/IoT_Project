@@ -1,6 +1,7 @@
 package com.iotproject.hotel
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -19,7 +20,7 @@ class RoomCardFragment : Fragment() {
 
     var requestQueue: RequestQueue? = null
 
-    val BASEURL = "http://192.168.1.27:8080/api/"
+    val BASEURL = "http://192.168.0.100:8080/api/"
 
     private fun blockCard(volleyListener: VolleyListener, blockCardJson: JSONObject){
         val urlAddGuest = BASEURL + "blockCard"
@@ -42,6 +43,9 @@ class RoomCardFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val preferences = androidx.preference.PreferenceManager.getDefaultSharedPreferences(requireContext())
+        val guestId = preferences.getInt("guest_id", 0)
+
         // TODO - set room number as value read from database
         val outputRoomNumber: TextView = view.findViewById(R.id.roomNumberText)
 
@@ -51,7 +55,6 @@ class RoomCardFragment : Fragment() {
             Toast.makeText(activity, "saving to database (table CheckIns, field validUntil) happens now", Toast.LENGTH_SHORT).show()
         }
 
-        // TODO - check why card is not blocking
         val blockButton: Button = view.findViewById(R.id.blockCardButton)
 
         val volleyListener: VolleyListener = object : VolleyListener {
@@ -60,15 +63,9 @@ class RoomCardFragment : Fragment() {
             }
         }
 
-        var guestId = 0
-
-        parentFragmentManager.setFragmentResultListener("requestKeyId", viewLifecycleOwner){
-            requestKey, bundle ->
-            guestId = bundle.getInt("bundleKeyId")
-        }
-
         blockButton.setOnClickListener {
             // TODO - data validation
+            Log.d("guest_id", guestId.toString())
             val blockCardJsonObject = JSONObject()
             blockCardJsonObject.put("guest_id", guestId)
             blockCard(volleyListener, blockCardJsonObject)
