@@ -1,6 +1,7 @@
 package com.iotproject.hotel
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -21,10 +22,12 @@ class CheckInFragment : Fragment() {
 
     val BASEURL = "http://192.168.0.100:8080/api/"
 
+    //TODO - check the response (success/fail)
+
     private fun checkIn(volleyListener: VolleyListener, checkInJson: JSONObject){
-        val urlAddGuest = BASEURL + "checkIN"
+        val urlCheckIn = BASEURL + "checkIN"
         requestQueue = Volley.newRequestQueue(requireContext())
-        val jsonObjectRequest = JsonObjectRequest(Request.Method.POST, urlAddGuest, checkInJson,
+        val jsonObjectRequest = JsonObjectRequest(Request.Method.POST, urlCheckIn, checkInJson,
                 { response -> checkInComplete(volleyListener) },
                 { error -> error.printStackTrace() })
         requestQueue?.add(jsonObjectRequest)
@@ -62,6 +65,7 @@ class CheckInFragment : Fragment() {
             val token = inputToken.editText?.text.toString().toInt()
             val checkInJsonObject = JSONObject()
             // TODO - data validation
+            Log.d("guest_id", guestId.toString())
             checkInJsonObject.put("token", token)
             checkInJsonObject.put("guest_id", guestId)
             checkIn(volleyListener, checkInJsonObject)

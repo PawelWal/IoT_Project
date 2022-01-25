@@ -2,6 +2,7 @@ package com.iotproject.hotel
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -28,6 +29,8 @@ class UserFragment : Fragment() {
 
     // TODO - get ip address from computer
     val BASEURL = "http://192.168.0.100:8080/api/"
+
+    //TODO - check the response (success/fail)
 
     private fun getJsonDataFromApi(volleyListener: VolleyListener){
         val urlCountries = BASEURL + "countries"
@@ -126,6 +129,7 @@ class UserFragment : Fragment() {
                         putInt("guest_id", guestId)
                         putBoolean("checked_in", false)
                     }
+                    Log.d("guest_id", guestId.toString())
                     findNavController().navigate(R.id.action_userFragment_to_checkInFragment)
                 }
             }
