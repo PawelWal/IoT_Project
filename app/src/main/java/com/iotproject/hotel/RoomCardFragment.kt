@@ -18,11 +18,11 @@ import org.json.JSONObject
 
 class RoomCardFragment : Fragment() {
 
-    var requestQueue: RequestQueue? = null
+    private var requestQueue: RequestQueue? = null
 
-    val BASEURL = "http://192.168.0.100:8080/api/"
+    private val BASEURL = "http://192.168.0.101:8080/api/"
 
-    //TODO - check the response (success/fail)
+    //TODO - check the responses (success/fail)
 
     private fun blockCard(volleyListener: VolleyListener, blockCardJson: JSONObject){
         val urlBlockCard = BASEURL + "blockCard"
@@ -60,8 +60,8 @@ class RoomCardFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val preferences = androidx.preference.PreferenceManager.getDefaultSharedPreferences(requireContext())
+        // TODO - data validation
         val guestId = preferences.getInt("guest_id", 0)
-
         val guestIdJsonObject = JSONObject()
         guestIdJsonObject.put("guest_id", guestId)
 
@@ -78,7 +78,6 @@ class RoomCardFragment : Fragment() {
 
         checkOutButton.setOnClickListener {
             checkOut(volleyListenerCheckOut, guestIdJsonObject)
-            Log.d("guest_id", guestId.toString())
         }
 
         val blockButton: Button = view.findViewById(R.id.blockCardButton)
@@ -90,10 +89,7 @@ class RoomCardFragment : Fragment() {
         }
 
         blockButton.setOnClickListener {
-            Log.d("guest_id", guestId.toString())
-            // TODO - data validation
             blockCard(volleyListener, guestIdJsonObject)
         }
     }
-
 }

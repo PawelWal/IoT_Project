@@ -18,11 +18,11 @@ import org.json.JSONObject
 
 class CheckInFragment : Fragment() {
 
-    var requestQueue: RequestQueue? = null
+    private var requestQueue: RequestQueue? = null
 
-    val BASEURL = "http://192.168.0.100:8080/api/"
+    private val BASEURL = "http://192.168.0.101:8080/api/"
 
-    //TODO - check the response (success/fail)
+    //TODO - check the responses (success/fail)
 
     private fun checkIn(volleyListener: VolleyListener, checkInJson: JSONObject){
         val urlCheckIn = BASEURL + "checkIN"
@@ -46,7 +46,6 @@ class CheckInFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val inputToken: TextInputLayout = view.findViewById(R.id.outlinedTextFieldToken)
-
         val preferences = androidx.preference.PreferenceManager.getDefaultSharedPreferences(requireContext())
 
         val volleyListener: VolleyListener = object : VolleyListener {
@@ -65,11 +64,9 @@ class CheckInFragment : Fragment() {
             val token = inputToken.editText?.text.toString().toInt()
             val checkInJsonObject = JSONObject()
             // TODO - data validation
-            Log.d("guest_id", guestId.toString())
             checkInJsonObject.put("token", token)
             checkInJsonObject.put("guest_id", guestId)
             checkIn(volleyListener, checkInJsonObject)
         }
     }
-
 }
