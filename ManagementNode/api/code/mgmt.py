@@ -33,8 +33,8 @@ class Mgmt:
                 cur.close()
                 if check_ins_numb + 1 == self.get_one_parameter_list("SELECT COUNT(id) FROM CheckIns")[0]:
                     self._conn.commit()
-                    return {"result": "success"}
-        return {"result": "fail"}
+                    return {"result": "success", "room": room_id}
+        return {"result": "fail", "room": -1}
 
     def check_out(self, guest_id: int):
         if guest_id <= self.__get_last_guest_id():
