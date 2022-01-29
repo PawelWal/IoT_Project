@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
+import androidx.core.content.edit
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.android.volley.Request
@@ -21,8 +22,6 @@ class RoomCardFragment : Fragment() {
     private var requestQueue: RequestQueue? = null
 
     private val BASEURL = "http://192.168.0.101:8080/api/"
-
-    //TODO - check the responses (success/fail)
 
     private fun blockCard(volleyListener: VolleyListener, blockCardJson: JSONObject){
         val urlBlockCard = BASEURL + "blockCard"
@@ -60,27 +59,41 @@ class RoomCardFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val preferences = androidx.preference.PreferenceManager.getDefaultSharedPreferences(requireContext())
-        // TODO - data validation
+
         val guestId = preferences.getInt("guest_id", 0)
         val guestIdJsonObject = JSONObject()
-        guestIdJsonObject.put("guest_id", guestId)
+        if (guestId > 0) {
+            guestIdJsonObject.put("guest_id", guestId)
+        }
 
-        // TODO - set room number as value read from database
         val outputRoomNumber: TextView = view.findViewById(R.id.roomNumberText)
+        var room = preferences.getInt("room", 0)
+        if (room > 0) outputRoomNumber.text = room.toString()
 
         val checkOutButton: Button = view.findViewById(R.id.checkOutButton)
+        val blockButton: Button = view.findViewById(R.id.blockCardButton)
 
         val volleyListenerCheckOut: VolleyListener = object : VolleyListener {
             override fun onResponseReceived() {
                 checkOutButton.isEnabled = false
+                outputRoomNumber.text = ""
+                preferences.edit {
+                    putInt("room", 0)
+                }
+                room = 0
+                blockButton.isEnabled = false
             }
         }
 
-        checkOutButton.setOnClickListener {
-            checkOut(volleyListenerCheckOut, guestIdJsonObject)
+        if (room == 0) {
+            checkOutButton.isEnabled = false
+            blockButton.isEnabled = false
         }
 
-        val blockButton: Button = view.findViewById(R.id.blockCardButton)
+        checkOutButton.setOnClickListener {
+            if (guestId > 0)
+            checkOut(volleyListenerCheckOut, guestIdJsonObject)
+        }
 
         val volleyListener: VolleyListener = object : VolleyListener {
             override fun onResponseReceived() {
@@ -89,6 +102,7 @@ class RoomCardFragment : Fragment() {
         }
 
         blockButton.setOnClickListener {
+            if (guestId > 0)
             blockCard(volleyListener, guestIdJsonObject)
         }
     }

@@ -15,6 +15,7 @@ import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
 import com.google.android.material.textfield.TextInputLayout
 import org.json.JSONObject
+import java.util.regex.Pattern
 
 class CheckInFragment : Fragment() {
 
@@ -22,19 +23,22 @@ class CheckInFragment : Fragment() {
 
     private val BASEURL = "http://192.168.0.101:8080/api/"
 
-    //TODO - check the responses (success/fail)
-
     private fun checkIn(volleyListener: VolleyListener, checkInJson: JSONObject){
         val urlCheckIn = BASEURL + "checkIN"
         requestQueue = Volley.newRequestQueue(requireContext())
         val jsonObjectRequest = JsonObjectRequest(Request.Method.POST, urlCheckIn, checkInJson,
-                { response -> checkInComplete(volleyListener) },
+                { response -> checkInComplete(response, volleyListener) },
                 { error -> error.printStackTrace() })
         requestQueue?.add(jsonObjectRequest)
     }
 
-    private fun checkInComplete(volleyListener: VolleyListener){
+    private fun checkInComplete(response: JSONObject, volleyListener: VolleyListener){
         Toast.makeText(activity, "Checked-in successfully", Toast.LENGTH_SHORT).show()
+        val preferences = androidx.preference.PreferenceManager.getDefaultSharedPreferences(requireContext())
+        val room = response.getInt("room")
+        preferences.edit {
+            putInt("room", room)
+        }
         volleyListener.onResponseReceived()
     }
 
@@ -61,12 +65,14 @@ class CheckInFragment : Fragment() {
 
         val buttonCheckIn: Button = view.findViewById(R.id.checkInButton)
         buttonCheckIn.setOnClickListener {
-            val token = inputToken.editText?.text.toString().toInt()
-            val checkInJsonObject = JSONObject()
-            // TODO - data validation
-            checkInJsonObject.put("token", token)
-            checkInJsonObject.put("guest_id", guestId)
-            checkIn(volleyListener, checkInJsonObject)
+            if (Pattern.matches("[0-9]+", inputToken.editText?.text.toString()) && guestId > 0) {
+                val token = inputToken.editText?.text.toString().toInt()
+                val checkInJsonObject = JSONObject()
+                checkInJsonObject.put("token", token)
+                checkInJsonObject.put("guest_id", guestId)
+                checkIn(volleyListener, checkInJsonObject)
+            }
+            else Toast.makeText(requireContext(), "Invalid token", Toast.LENGTH_SHORT).show()
         }
     }
 }

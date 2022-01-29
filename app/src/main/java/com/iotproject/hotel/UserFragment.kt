@@ -17,6 +17,7 @@ import com.google.android.material.textfield.TextInputLayout
 import org.json.JSONObject
 import androidx.core.content.edit
 import com.google.android.material.textfield.TextInputLayout.END_ICON_NONE
+import java.util.regex.Pattern
 
 
 class UserFragment : Fragment() {
@@ -43,8 +44,6 @@ class UserFragment : Fragment() {
     var guestCountryCode: Int? = null
 
     private val BASEURL = "http://192.168.0.101:8080/api/"
-
-    //TODO - check the responses (success/fail)
 
     private fun getJsonDataFromApi(volleyListener: VolleyListener){
         val urlCountries = BASEURL + "countries"
@@ -166,41 +165,73 @@ class UserFragment : Fragment() {
             getJsonDataFromApi(volleyListener)
 
             buttonSave.setOnClickListener {
-                // TODO - data validation
+
+                if (Pattern.matches("^[A-Z][a-z]*\$", inputName.editText?.text.toString()))
                 guestName = inputName.editText?.text.toString()
+                else Toast.makeText(requireContext(), "Invalid name", Toast.LENGTH_SHORT).show()
+
+                if (Pattern.matches("^[A-Z][a-z]*'?-?[A-Z][a-z]*", inputSurname.editText?.text.toString())
+                        || Pattern.matches("^[A-Z][a-z]*\$", inputSurname.editText?.text.toString()))
                 guestSurname = inputSurname.editText?.text.toString()
+                else Toast.makeText(requireContext(), "Invalid surname", Toast.LENGTH_SHORT).show()
+
+                if (Pattern.matches("^[A-Z0-9][A-Z ]*[0-9 ]*", inputDocument.editText?.text.toString()))
                 guestDocument = inputDocument.editText?.text.toString()
+                else Toast.makeText(requireContext(), "Invalid document", Toast.LENGTH_SHORT).show()
+
+                if (Pattern.matches("^\\+[1-9][0-9 ]*", inputPhone.editText?.text.toString()))
                 guestPhone = inputPhone.editText?.text.toString()
+                else Toast.makeText(requireContext(), "Invalid phone", Toast.LENGTH_SHORT).show()
+
+                if (Pattern.matches("^[0-9a-zA-Z][0-9a-zA-Z.]*@[0-9a-zA-Z.]*.[0-9a-zA-Z]", inputEmail.editText?.text.toString()))
                 guestEmail = inputEmail.editText?.text.toString()
+                else Toast.makeText(requireContext(), "Invalid e-mail", Toast.LENGTH_SHORT).show()
+
+                if (Pattern.matches("[A-Za-z0-9. \\-']*", inputAddress.editText?.text.toString()))
                 guestAddress = inputAddress.editText?.text.toString()
+                else Toast.makeText(requireContext(), "Invalid address", Toast.LENGTH_SHORT).show()
+
+                if (Pattern.matches("^[A-Z][A-Za-z. \\-']*", inputCity.editText?.text.toString()))
                 guestCity = inputCity.editText?.text.toString()
+                else Toast.makeText(requireContext(), "Invalid city", Toast.LENGTH_SHORT).show()
+
+                if (Pattern.matches("^[A-Z0-9][A-Z0-9 \\-]*", inputCode.editText?.text.toString()))
                 guestCode = inputCode.editText?.text.toString()
+                else Toast.makeText(requireContext(), "Invalid code", Toast.LENGTH_SHORT).show()
+
                 guestCountry = inputCountry.editText?.text.toString()
+                if (countriesCodesMap.isNotEmpty())
                 guestCountryCode = countriesCodesMap.filterValues { it == guestCountry }.keys.first().toInt()
+                else Toast.makeText(requireContext(), "Invalid country", Toast.LENGTH_SHORT).show()
 
-                val guestJsonObject = JSONObject()
-                guestJsonObject.put("email", guestEmail)
-                guestJsonObject.put("name", guestName)
-                guestJsonObject.put("surname", guestSurname)
-                guestJsonObject.put("doc_no", guestDocument)
-                guestJsonObject.put("phone_no", guestPhone)
-                guestJsonObject.put("address", guestAddress)
-                guestJsonObject.put("zip_code", guestCode)
-                guestJsonObject.put("city", guestCity)
-                guestJsonObject.put("country_code", guestCountryCode)
+                if (guestEmail != null || guestName != null || guestSurname != null || guestDocument != null
+                        || guestPhone != null || guestAddress != null || guestCode != null || guestCity != null
+                        || guestCountry != null) {
 
-                val volleyListenerGuest: VolleyListener = object : VolleyListener {
-                    override fun onResponseReceived() {
-                        preferences.edit {
-                            putInt("guest_id", guestId)
-                            putBoolean("checked_in", false)
-                            putString("guest_name", guestName)
-                            putString("guest_surname", guestSurname)
+                    val guestJsonObject = JSONObject()
+                    guestJsonObject.put("email", guestEmail)
+                    guestJsonObject.put("name", guestName)
+                    guestJsonObject.put("surname", guestSurname)
+                    guestJsonObject.put("doc_no", guestDocument)
+                    guestJsonObject.put("phone_no", guestPhone)
+                    guestJsonObject.put("address", guestAddress)
+                    guestJsonObject.put("zip_code", guestCode)
+                    guestJsonObject.put("city", guestCity)
+                    guestJsonObject.put("country_code", guestCountryCode)
+
+                    val volleyListenerGuest: VolleyListener = object : VolleyListener {
+                        override fun onResponseReceived() {
+                            preferences.edit {
+                                putInt("guest_id", guestId)
+                                putBoolean("checked_in", false)
+                                putString("guest_name", guestName)
+                                putString("guest_surname", guestSurname)
+                            }
+                            findNavController().navigate(R.id.action_userFragment_to_checkInFragment)
                         }
-                        findNavController().navigate(R.id.action_userFragment_to_checkInFragment)
                     }
+                    addGuest(volleyListenerGuest, guestJsonObject)
                 }
-                addGuest(volleyListenerGuest, guestJsonObject)
             }
         }
     }
